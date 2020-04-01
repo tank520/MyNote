@@ -1,0 +1,15 @@
+
+-- 生成服务器证书
+keytool -genkey -alias tomcat -keypass 123456 -keyalg RSA -keysize 1024 -validity 365 -keystore D:/tomcat.keystore -storepass 123456
+
+-- 客户端生成证书
+keytool -genkey -alias client -keypass 123456 -keyalg RSA -keysize 1024 -validity 365 -storetype PKCS12 -keystore D:/client.p12 -storepass 123456
+
+-- 客户端导出为cer
+keytool -export -alias client -keystore D:/client.p12 -storetype PKCS12 -keypass 123456 -file D:/client.cer
+
+-- 导入到服务器的证书库
+keytool -import -v -file D:/client.cer -keystore D:/tomcat.keystore -storepass 123456
+
+-- 让客户端信任服务器证书
+keytool -keystore D:/tomcat.keystore -export -alias tomcat -file D:/server.cer
