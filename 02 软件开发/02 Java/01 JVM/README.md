@@ -1,5 +1,7 @@
 # GC
 
+![alt 垃圾收集器](https://github.com/tank520/MyNote/blob/master/02%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02%20Java/01%20JVM/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.png?raw=true)
+
 ## 垃圾收集算法
 
 ### Mark-Sweep
