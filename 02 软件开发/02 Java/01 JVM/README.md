@@ -44,6 +44,14 @@ ParNew  ---多线程版本的Serial，STW，适用几G内存
 
 Parallel Scavenge  ---多线程并行，复制算法，可设置吞吐量，适用几十G内存
 
-CMS  ---多线程并行，减少STW，标记-清除算法，适用几百G内存
+CMS  ---多线程并行，减少STW，标记-清除算法，适用几十G内存
 
-G1 --- 多线程并行，物理上不分区，逻辑上分区，以Region为单位回收
+G1 --- 多线程并行，适用上百G内存，物理上不分区，逻辑上分区，以Region为单位回收
+
+>三色标记 + SATB
+
+ZGC、Shenandoah --- 4T，物理、逻辑都不分代
+
+>ColoredPointer(颜色指针、着色指针)
+
+Epsilon --- 啥也不干（调试、确认不用GC参与）
