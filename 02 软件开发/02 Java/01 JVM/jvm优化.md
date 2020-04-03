@@ -26,6 +26,7 @@
   >不稳定：-XX开头，下个版本可能取消
 
 * -XX相关参数查看
+  
   1. -XX:+PrintCommandLineFlags：打印启动时真正使用的命令行参数
   2. -XX:+PrintFlagsFinal 最终参数值，可以查看java所有参数
   3. -XX:+PrintFlagsInitial 默认参数值
@@ -43,6 +44,22 @@
      2. 吞吐量= 用户时间 / (用户时间 + GC时间)【PS】
 
   2. 选择回收器组合
+
+     * -XX:+UseSerialGC = Serial New (DefNew) + Serial Old
+
+       小型程序。默认情况下不会是这种选项，HotSpot会根据计算及配置和JDK版本自动选择收集器
+
+     * -XX:+UseParNewGC = ParNew + SerialOld
+
+       这个组合已经很少用（在某些版本中已经废弃）
+
+     * -XX:+UseConcMarkSweepGC = ParNew + CMS + Serial Old
+
+     * -XX:+UseParallelGC = Parallel Scavenge + Parallel Old (1.8默认) 【PS + SerialOld】
+
+     * -XX:+UseParallelOldGC = Parallel Scavenge + Parallel Old
+
+     * -XX:+UseG1GC = G1
 
   3. 计算内存需求
 
