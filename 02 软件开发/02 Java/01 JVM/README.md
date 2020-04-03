@@ -16,6 +16,24 @@
 
 标记整理算法，优点：不会产生内存碎片，适合老年代大对象存储；缺点：算法复杂，涉及对象的移动
 
+### 三色标记
+
+Incremental Update  --- CMS
+
+黑色  ---自己标记完成，成员变量标记完成
+
+灰色  ---自己标记完成，成员变量没有标记完成
+
+白色  ---没有标记的
+
+### SATB(Snapshot at the begining)
+
+G1
+
+### Colored Pointers
+
+ZGC、Shenandoah
+
 ### 算法实现
 
 #### 枚举根节点
