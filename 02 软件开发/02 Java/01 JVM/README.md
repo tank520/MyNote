@@ -52,6 +52,47 @@ ZGC、Shenandoah
 
 安全点的扩展，某段区域引用不会发生变化。
 
+### Minor GC与Major GC
+
+#### 新生代 GC（Minor GC）
+
+​		指发生在新生代的垃圾收集动作，因为 Java 对象大多都具备朝生夕灭的特性，所以 Minor GC 非常频繁，一般回收速度也比较快。
+
+##### 	触发机制
+
+			* 当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden代满，Survivor满不会引发GC。
+
+#### 老年代 GC（Major GC）
+
+​		指发生在老年代的 GC，出现了 Major GC，经常会伴随至少一次的 Minor GC（但非绝对的，在 ParallelScavenge 收集器的收集策略里 就有直接进行 Major GC 的策略选择过程） 。MajorGC 的速度一般会比 Minor GC 慢 10倍以上。
+
+##### 	触发机制
+
+		- 当年老代满时会引发Major GC。
+
+#### Full GC
+
+​		Major GC 是清理OldGen。 Full GC 是清理整个堆空间—包括年轻代和永久代。
+
+​	触发机制
+
+ * System.gc
+
+ * 老年代空间不足
+
+ * 方法区空间不足
+
+ * promotion failed (年代晋升失败,比如eden区的存活对象晋升到S区放不下，又尝试直接晋升到Old区又放不下，那么Promotion Failed,会触发FullGC)
+
+ * CMS的Concurrent-Mode-Failure 由于CMS回收过程中主要分为四步:
+   1.CMS initial mark 2.CMS Concurrent mark 3.CMS remark 4.CMS Concurrent sweep。
+
+   在2中gc线程与用户线程同时执行，那么用户线程依旧可能同时产生垃圾，
+   如果这个垃圾较多无法放入预留的空间就会产生CMS-Mode-Failure，
+   切换为SerialOld单线程做mark-sweep-compact。
+
+* 新生代晋升的平均大小大于老年代的剩余空间 （为了避免新生代晋升到老年代失败）。
+
 ## 收集器
 
 Serial  ---单线程，STW，复制算法，适用几十M内存
