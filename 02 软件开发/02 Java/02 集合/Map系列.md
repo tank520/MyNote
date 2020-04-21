@@ -21,7 +21,13 @@
 
 ## HashTable
 
+​	方法都加了synchronized，因此是线程安全的。
+
 ## LinkedHashMap
+
+​		自定了Entry，增加before、after指针，实现有序插入和访问。
+
+## TreeMap
 
 ​		
 
