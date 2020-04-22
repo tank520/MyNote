@@ -29,6 +29,13 @@
 
 ## TreeMap
 
-​		
+​		使用SortedMap对key进行排序，通过红黑树算法实现。
 
 ## ConcurrentHashMap
+
+### 1.7版本
+
+​		使用Segment + 自定义HashEntry实现，通过Segment使用可重入锁来对主体进行分段锁，提高并发效率，由于HashEntry使用volatile修饰，所以get不需要额外的加锁，获取map的size时，有两种方式：
+
+1. 不加锁而多次计算size，若前后两次结果一致则表示准确（最多3次）
+2. 如果两次结果不同，就对所有的Segment加锁来计算size
