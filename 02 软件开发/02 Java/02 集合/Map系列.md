@@ -42,4 +42,10 @@
 
 ### 1.8版本
 
-​		使用数组 + 链表 + 红黑树实现，通过CAS和synchronized实现线程安全。
+​		使用数组 + 链表 + 红黑树实现，通过CAS和Synchronized实现线程安全。
+
+​		为什么使用Synchronized代替ReentrantLock？
+
+1. 1.8里面锁的是链表或红黑树的头节点而不是一整个链表，将锁细化了
+2. Synchronized和ReentrantLock他们的开销差距是在释放锁时唤醒线程的数量，Synchronized是唤醒锁池里所有的线程+刚好来访问的线程，而ReentrantLock则是当前线程后进来的第一个线程 + 刚好来访问的线程
+3. 如果是线程并发量不大的情况下，那么Synchronized因为自旋锁、偏向锁、轻量级锁的原因，不用将等待线程挂起，偏向锁甚至不用自旋，所以在这种情况下要比ReentrantLock高效
