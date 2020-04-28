@@ -27,6 +27,12 @@
 
 ​		自定了Entry，增加before、after指针，实现有序插入和访问。
 
+​		特性
+
+- removeEldestEntry
+
+  删除策略，默认返回的false，如果固定大小，采用的是LRU算法
+
 ## TreeMap
 
 ​		使用SortedMap对key进行排序，通过红黑树算法实现。
