@@ -24,6 +24,25 @@
 
 ​	dubbo官方推荐使用dubbo协议。默认端口号20880
 
+### 源码分析
+
+#### Dubbo SPI
+
+​		SPI 全称为 `Service Provider Interface`，是一种服务发现机制。SPI 的本质是将接口实现类的全限定名配置在文件中，并由服务加载器读取配置文件，加载实现类。这样可以在运行时，动态为接口替换实现类。正因此特性，我们可以很容易的通过 SPI 机制为我们的程序提供拓展功能。SPI 机制在第三方框架中也有所应用，比如 Dubbo 就是通过 SPI 机制加载所有的组件。不过，Dubbo 并未使用 Java 原生的 SPI 机制，而是对其进行了增强，使其能够更好的满足需求。在 Dubbo 中，SPI 是一个非常重要的模块。基于 SPI，我们可以很容易的对 Dubbo 进行拓展。
+
+##### 使用方法
+
+​	Dubbo SPI 的相关逻辑被封装在了` ExtensionLoader` 类中，通过 `ExtensionLoader`，我们可以加载指定的实现类。
+
+1. 接口上加上@SPI注解
+
+2. Dubbo SPI 所需的配置文件需放置在 META-INF/dubbo 路径下，文件名为接口的全限定名。例如：
+
+   ```java
+   optimusPrime = org.apache.spi.OptimusPrime
+   bumblebee = org.apache.spi.Bumblebee
+   ```
+
 ### 直连方式
 
 ​	不使用注册中心，服务者和消费者配置中的`registry` = 'N/A'
