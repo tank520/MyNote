@@ -43,6 +43,73 @@
    bumblebee = org.apache.spi.Bumblebee
    ```
 
+#### filter
+
+​	结合拓展点功能，使用装饰模式来进行服务的过滤。
+
+```java
+private static <T> Invoker<T> buildInvokerChain(final Invoker<T> invoker, String key, String group) {
+        Invoker<T> last = invoker;
+        List<Filter> filters = ExtensionLoader.getExtensionLoader(Filter.class).getActivateExtension(invoker.getUrl(), key, group);
+
+        if (!filters.isEmpty()) {
+            for (int i = filters.size() - 1; i >= 0; i--) {
+                final Filter filter = filters.get(i);
+                final Invoker<T> next = last;
+                last = new Invoker<T>() {
+
+                    @Override
+                    public Class<T> getInterface() {
+                        return invoker.getInterface();
+                    }
+
+                    @Override
+                    public URL getUrl() {
+                        return invoker.getUrl();
+                    }
+
+                    @Override
+                    public boolean isAvailable() {
+                        return invoker.isAvailable();
+                    }
+
+                    @Override
+                    public Result invoke(Invocation invocation) throws RpcException {
+                        Result asyncResult;
+                        try {
+                            asyncResult = filter.invoke(next, invocation);
+                        } catch (Exception e) {
+                            // onError callback
+                            if (filter instanceof ListenableFilter) {
+                                Filter.Listener listener = ((ListenableFilter) filter).listener();
+                                if (listener != null) {
+                                    listener.onError(e, invoker, invocation);
+                                }
+                            }
+                            throw e;
+                        }
+                        return asyncResult;
+                    }
+
+                    @Override
+                    public void destroy() {
+                        invoker.destroy();
+                    }
+
+                    @Override
+                    public String toString() {
+                        return invoker.toString();
+                    }
+                };
+            }
+        }
+
+        return new CallbackRegistrationInvoker<>(last, filters);
+    }
+```
+
+
+
 ### 直连方式
 
 ​	不使用注册中心，服务者和消费者配置中的`registry` = 'N/A'
