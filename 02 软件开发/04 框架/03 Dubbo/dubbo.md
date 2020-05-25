@@ -18,11 +18,17 @@
 
 ​	服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心
 
-### 支持的协议
+### 通信协议
 
 ​	dubbo、hessian、rmi、http、webservice、thrift、memcached、redis。
 
-​	dubbo官方推荐使用dubbo协议。默认端口号20880
+​	dubbo官方推荐使用dubbo协议。默认端口号20880。
+
+### 序列化协议
+
+​	支持hessian、java二进制序列化、json、SOAP文本序列化多种序列化协议。
+
+​	hessian是默认的序列化协议。
 
 ### 通信过程
 
