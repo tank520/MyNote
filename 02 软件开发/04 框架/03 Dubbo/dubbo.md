@@ -60,6 +60,22 @@
 
    回应内容封装为 RpcResult 对象中，序列化后通过 netty 传给客户端
 
+### 数据包格式
+
+​	Dubbo 数据包分为消息头和消息体，消息头用于存储一些元信息，比如魔数（Magic），数据包类型（Request/Response），消息体长度（Data Length）等。消息体中用于存储具体的调用消息，比如方法名称，参数列表等。下面简单列举一下消息头的内容。
+
+| 偏移量(Bit) | 字段         | 取值                                                         |
+| ----------- | ------------ | ------------------------------------------------------------ |
+| 0 ~ 7       | 魔数高位     | 0xda00                                                       |
+| 8 ~ 15      | 魔数低位     | 0xbb                                                         |
+| 16          | 数据包类型   | 0 - Response, 1 - Request                                    |
+| 17          | 调用方式     | 仅在第16位被设为1的情况下有效，0 - 单向调用，1 - 双向调用    |
+| 18          | 事件标识     | 0 - 当前数据包是请求或响应包，1 - 当前数据包是心跳包         |
+| 19 ~ 23     | 序列化器编号 | 2 - Hessian2Serialization<br/>3 - JavaSerialization<br>4 - CompactedJavaSerialization<br>6 - FastJsonSerialization<br>7 - NativeJavaSerialization<br>8 - KryoSerialization<br>9 - FstSerialization |
+| 24 ~ 31     | 状态         | 20 - OK<br>30 - CLIENT_TIMEOUT <br/>31 - SERVER_TIMEOUT<br/>40 - BAD_REQUEST<br/>50 - BAD_RESPONSE ...... |
+| 32 ~ 95     | 请求编号     | 共8字节，运行时生成                                          |
+| 96 ~ 127    | 消息体长度   | 运行时计算                                                   |
+
 ### 源码分析
 
 #### Dubbo SPI
