@@ -123,7 +123,7 @@
 * -XX:+UseParNewGC = ParNew + SerialOld
   * 这个组合已经很少用（在某些版本中已经废弃）
   * https://stackoverflow.com/questions/34962257/why-remove-support-for-parnewserialold-anddefnewcms-in-the-future
-* -XX:+UseConc<font color=red>(urrent)</font>MarkSweepGC = ParNew + CMS + Serial Old
+* -XX:+UseConcurrentMarkSweepGC = ParNew + CMS + Serial Old
 * -XX:+UseParallelGC = Parallel Scavenge + Parallel Old (1.8默认) 【PS + SerialOld】
 * -XX:+UseParallelOldGC = Parallel Scavenge + Parallel Old
 * -XX:+UseG1GC = G1
@@ -287,9 +287,7 @@ total = eden + 1个survivor
 
 ### 优化环境
 
-1. 有一个50万PV的资料类网站（从磁盘提取文档到内存）原服务器32位，1.5G
-   的堆，用户反馈网站比较缓慢，因此公司决定升级，新的服务器为64位，16G
-   的堆内存，结果用户反馈卡顿十分严重，反而比以前效率更低了
+1. 有一个50万PV的资料类网站（从磁盘提取文档到内存）原服务器32位，1.5G的堆，用户反馈网站比较缓慢，因此公司决定升级，新的服务器为64位，16G的堆内存，结果用户反馈卡顿十分严重，反而比以前效率更低了
    1. 为什么原网站慢?
       很多用户浏览数据，很多数据load到内存，内存不足，频繁GC，STW长，响应时间变慢
    2. 为什么会更卡顿？
@@ -797,16 +795,16 @@ OOM产生的原因多种多样，有些程序未必产生OOM，不断FGC(CPU飙�
 
 1. -XX:MaxTenuringThreshold控制的是什么？
    A: 对象升入老年代的年龄
-     	B: 老年代触发FGC时的内存垃圾比例
+   B: 老年代触发FGC时的内存垃圾比例
 
 2. 生产环境中，倾向于将最大堆内存和最小堆内存设置为：（为什么？）
    A: 相同 B：不同
 
 3. JDK1.8默认的垃圾回收器是：
    A: ParNew + CMS
-     	B: G1
-     	C: PS + ParallelOld
-     	D: 以上都不是
+   B: G1
+   C: PS + ParallelOld
+   D: 以上都不是
 
 4. 什么是响应时间优先？
 
