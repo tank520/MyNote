@@ -22,3 +22,6 @@
 
    https://visualgo.net/zh
 
+7. 书籍笔记
+
+   https://www.bookstack.cn/
