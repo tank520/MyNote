@@ -59,11 +59,11 @@ InnoDB存储引擎页大小为16KB，即16384字节，如何存放65535字节呢
 
 ### 间隙锁(Gap Locks)
 
-在索引记录之间的间隙中加锁，或者是在某一条索引记录之前或者之后加锁，并不包括该索引记录本身。gap lock的机制主要是解决可重复读模式下的幻读问题，关于幻读的演示和gap锁如何解决了幻读。
+在索引记录之间的间隙中加锁，或者是在某一条索引记录之前或者之后加锁，并不包括该索引记录本身。gap lock的机制主要是解决可重复读模式下的幻读问题。
 
 ### 临键锁(Next-key Locks)
 
-Record Locks + Next-key Locks
+Record Locks + Gap Locks
 
 ### 插入意向锁(Insert Intention Locks)
 
