@@ -1,0 +1,1 @@
+多线程，AtomicInteger底层用的啥？cas的原理，AtomicInteger用了Voliate么？voliate的原理，变量加Voliate被修改了其他线程能立刻知道么？

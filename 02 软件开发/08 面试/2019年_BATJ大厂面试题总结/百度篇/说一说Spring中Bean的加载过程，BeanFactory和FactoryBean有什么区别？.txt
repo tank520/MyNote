@@ -1,0 +1,1 @@
+ 用过Spring吧，说一说Spring中Bean的加载过程，BeanFactory和FactoryBean有什么区别？

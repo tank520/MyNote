@@ -1,0 +1,65 @@
+题目：已知 sqrt (2)约等于 1.414，要求不用数学库，求 sqrt (2)精确到小数点后 10 位。
+
+
+
+参考答案：
+
+* 考察点
+
+基础算法的灵活应用能力（二分法学过数据结构的同学都知道，但不一定往这个方向考虑；如果学过数值计算的同学，应该还要能想到牛顿迭代法并解释清楚）
+退出条件设计
+二分法
+
+1. 已知 sqrt(2)约等于 1.414，那么就可以在(1.4, 1.5)区间做二分
+
+查找，如：
+a) high=>1.5
+b) low=>1.4
+c) mid => (high+low)/2=1.45
+d) 1.45*1.45>2 ? high=>1.45 : low => 1.45
+
+
+public class Main {
+    public static void main(String[] args) {    
+        //手写二分估值
+        System.out.println(myCalculate(1.4,1.4,1.5));
+        //调用函数输出
+        //System.out.println("----------sqrt= "+Math.sqrt(2.0));
+    }
+    //根号2约等于 1.414
+    private static double myCalculate(double ans,double low,double high) {
+        double mid = 0;
+        // 二分法,结束条件：差值小于等于1e-10即可
+        while(high-low>1e-10){
+            
+             mid = (high+low)/2.0;
+           // System.out.println("-----------mid= "+mid+"  mid*mid= "+mid*mid);
+            //二分，逐步向中间值收拢
+            if(mid*mid <= 2.0){
+                low=mid;
+            }
+            else{
+                high=mid;
+            }
+            
+        }
+        
+        return mid;
+    }
+    
+}
+牛顿迭代法
+
+1.牛顿迭代法的公式为：
+
+xn+1 = xn-f(xn)/f'(xn)
+
+对于本题，需要求解的问题为：f(x)=x2-2 的零点
+
+
+EPSILON = 0.1 ** 10
+def newton(x):
+    if abs(x ** 2 - 2) > EPSILON:
+        return newton(x - (x ** 2 - 2) / (2 * x))
+    else:
+        return x

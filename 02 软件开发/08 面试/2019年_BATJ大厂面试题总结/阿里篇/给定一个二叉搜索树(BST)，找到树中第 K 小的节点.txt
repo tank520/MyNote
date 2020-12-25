@@ -1,0 +1,74 @@
+题目：给定一个二叉搜索树(BST)，找到树中第 K 小的节点。
+
+
+
+参考答案：
+
+* 考察点
+
+基础数据结构的理解和编码能力
+递归使用
+
+说明：
+
+如果按照中序遍历的顺序遍历一棵二叉搜索树，遍历序列的数值是递增排序的。上图中的二叉搜索树的中序遍历序列为{2,3,4,5,6,7,8}，因此，只需要用中序遍历算法遍历一棵二叉搜索树，就很容易找出它的第k大结点。
+
+
+?
+public class Demo1 {
+    class BinaryTreeNode{
+        int val;
+        BinaryTreeNode left;
+        BinaryTreeNode right;
+        public BinaryTreeNode(int val) {
+            this.val = val;
+        }
+        
+    }
+    public static void main(String[] args) {
+        Demo1 demo = new Demo1();
+        BinaryTreeNode root = demo.new BinaryTreeNode(5);
+        BinaryTreeNode a = demo.new BinaryTreeNode(3);
+        BinaryTreeNode b = demo.new BinaryTreeNode(7);
+        BinaryTreeNode c = demo.new BinaryTreeNode(2);
+        BinaryTreeNode d = demo.new BinaryTreeNode(4);
+        BinaryTreeNode e = demo.new BinaryTreeNode(6);
+        BinaryTreeNode f = demo.new BinaryTreeNode(8);
+        
+        root.left = a;
+        root.right = b;
+        a.left = c;
+        a.right = d;
+        b.left = e;
+        b.right = f;
+        
+        BinaryTreeNode k = KthNode(root,3);
+        System.out.println(k.val);
+    }
+    
+    static int index=0;
+    
+    static BinaryTreeNode KthNode(BinaryTreeNode pRoot,int k) {
+        if(pRoot==null || k<=0)
+            return null;
+        return getKthNode(pRoot,k);
+    }
+    
+    private static BinaryTreeNode getKthNode(BinaryTreeNode pRoot,int k) {
+        BinaryTreeNode KthNode = null;
+        if(pRoot.left != null)//如果该节点有左孩子，就一直递归到左叶子节点
+            KthNode = getKthNode(pRoot.left,k);
+        if(KthNode==null) {
+            index++;  //中序遍历的计数
+            if(k==index)
+                KthNode = pRoot; 
+        }
+        
+        if(KthNode==null && pRoot.right!=null)
+            //如果该节点有右孩子，就递归到右孩子
+            KthNode = getKthNode(pRoot.right,k);
+        
+        return KthNode;
+        
+    }
+}

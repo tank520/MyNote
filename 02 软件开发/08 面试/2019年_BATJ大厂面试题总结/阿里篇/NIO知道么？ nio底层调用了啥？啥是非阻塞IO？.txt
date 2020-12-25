@@ -1,0 +1,1 @@
+string类的用法，string a=Hello string a = new string(hello)创建的流程

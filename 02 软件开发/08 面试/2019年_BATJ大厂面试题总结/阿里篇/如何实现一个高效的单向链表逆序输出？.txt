@@ -1,0 +1,22 @@
+问题：如何实现一个高效的单向链表逆序输出？
+
+
+
+参考答案：下面是其中一种写法，也可以有不同的写法，比如递归等。供参考。
+
+
+public class MyLinkedList {
+    
+    public int data;
+    public MyLinkedList next;
+    
+    public MyLinkedList(int data) {
+        this.data=data;
+        this.next=null;
+    }
+    
+    public MyLinkedList() {
+        this.data=-1;
+        this.next=null;
+        
+    }

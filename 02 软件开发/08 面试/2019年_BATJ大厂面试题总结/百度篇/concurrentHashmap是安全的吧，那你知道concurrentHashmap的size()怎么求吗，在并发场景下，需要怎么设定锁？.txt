@@ -1,0 +1,1 @@
+concurrentHashmap是安全的吧，那你知道concurrentHashmap的size()怎么求吗，在并发场景下，需要怎么设定锁？

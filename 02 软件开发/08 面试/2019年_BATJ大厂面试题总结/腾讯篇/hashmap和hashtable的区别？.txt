@@ -1,0 +1,1 @@
+hashmap和hashtable的区别？
