@@ -27,3 +27,24 @@ Broker保证消息的存储、传递和HA等。
 ### Consumer
 
 消息消费者，用于消费消息
+
+## 存储
+
+### Commit Log
+
+消息存放的最终物理文件，被本机Broke的所有Queue所共享。
+
+顺序写、随机读
+
+### Consume Queue
+
+存储路径格式：/${topicName}/${queueId}/${fileName}
+
+格式：
+
+![img](https://upload-images.jianshu.io/upload_images/175724-7212acc81b91c086.png?imageMogr2/auto-orient/strip%7CimageView2/2)
+
+1. CommitLog Offset是指这条消息在Commit Log文件中的实际偏移量
+2. Size存储中消息的大小
+3. Message Tag HashCode存储消息的Tag的哈希值：主要用于订阅时消息过滤（订阅时如果指定了Tag，会根据HashCode来快速查找到订阅的消息）
+
