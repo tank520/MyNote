@@ -102,3 +102,68 @@ PV 和 PVC 使得 `Kubernetes` 集群具备了存储的逻辑抽象能力，使�
 
 命名空间为 `Kubernetes` 集群提供虚拟的隔离作用，`Kubernetes` 集群初始有两个命名空间，分别是默认命名空间 default 和系统命名空间 kube-system，除此以外，管理员可以可以创建新的命名空间满足需要。
 
+## 资源对象
+
+在 `Kubernetes` 系统中，`*Kubernetes` 对象是持久化的条目。`Kubernetes` 使用这些条目去表示整个集群的状态。特别地，它们描述了如下信息：
+
+- 什么容器化应用在运行（以及在哪个 Node 上）
+- 可以被应用使用的资源
+- 关于应用如何表现的策略，比如重启策略、升级策略，以及容错策略
+
+`Kubernetes` 对象是 “目标性记录” —— 一旦创建对象，`Kubernetes` 系统将持续工作以确保对象存在。通过创建对象，可以有效地告知 `Kubernetes` 系统，所需要的集群工作负载看起来是什么样子的，这就是 `Kubernetes` 集群的 **期望状态**。
+
+| 类别     | 名称                                                         |
+| :------- | ------------------------------------------------------------ |
+| 资源对象 | Pod、ReplicaSet、ReplicationController、Deployment、StatefulSet、DaemonSet、Job、CronJob、HorizontalPodAutoscaling、Node、Namespace、Service、Ingress、Label、CustomResourceDefinition |
+| 存储对象 | Volume、PersistentVolume、Secret、ConfigMap                  |
+| 策略对象 | SecurityContext、ResourceQuota、LimitRange                   |
+| 身份对象 | ServiceAccount、Role、ClusterRole                            |
+
+## 控制器
+
+### RC、RS
+
+`ReplicationController` 用来确保容器应用的副本数始终保持在用户定义的副本数，即如果有容器异常退出，会自动创建新的 Pod 来替代；而如果异常多出来的容器也会自动回收。
+
+在新版本的 `Kubernetes` 中建议使用 `ReplicaSet` 来取代 `ReplicationController`。`ReplicaSet` 跟 `ReplicationController` 没有本质的不同，只是名字不一样，并且 `ReplicaSet` 支持集合式的 selector。
+
+### Deployment
+
+`Deployment`为 Pod 和 ReplicaSet 提供了一个声明式定义（declarative）方法，用来替代以前的 ReplicationController 来方便的管理应用。典型的应用场景包括：
+
+- 定义 Deployment 来创建 Pod 和ReplicaSet
+- 滚动升级和回滚应用
+- 扩容和缩容
+- 暂停和继续 Deployment
+
+### StatefulSet
+
+`StatefulSet`是为了解决有状态服务的问题（对应`Deployments`和`ReplicaSet`是为无状态服务而设计），其应用场景包括：
+
+- 稳定的持久化存储，即Pod重新调度后还是能访问到相同的持久化数据，基于PVC来实现
+- 稳定的网络标志，即Pod重新调度后其PodName和HostName不变，基于Headless Service（即没有Cluster IP的Service）来实现
+- 有序部署，有序扩展，即Pod是有顺序的，在部署或者扩展的时候要依据定义的顺序依次依次进行（即从 0 到 N-1，在下一个 Pod 运行之前所有之前的 Pod 必须都是 Running 和 Ready 状态），基于 init containers 来实现
+- 有序收缩，有序删除（即从 N-1 到 0）
+
+### DaemonSet
+
+`DaemonSet`确保全部（或者一些）Node上运行一个 Pod 的副本。当有Node加入集群时，也会为他们新增一个Pod。当有Node从集群移除时，这些Pod也会被回收。删除`DaemonSet`将会删除它创建的所有Pod。
+
+使用`DaemonSert`的一些典型用法：
+
+- 运行集群存储daemon，例如在每个Node上运行glusterd、ceph。
+- 在每个Node上运行日志收集daemon，例如fluentd、logstash。
+- 在每个Node上运行监控daemon，例如Promethus Node Exporter、collectd、Datadog代理、New Relic代理，或Ganglia gmond。
+
+### Job
+
+Job负责批处理任务，即仅执行一次的任务，它保证批处理任务的一个或多个Pod成功结束。
+
+### CronJob
+
+Cron Job管理基于时间的Job，即：
+
+- 在给定时间点只运行一次
+- 周期性地在给定时间点运行
+
+一个`CronJob`对象类似于crontab文件中的一行。它根据指定的预定计划周期性地运行一个Job。
